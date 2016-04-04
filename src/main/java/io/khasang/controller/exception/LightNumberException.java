@@ -1,7 +1,18 @@
 package io.khasang.controller.exception;
 
-/**
- * Created by sergey on 23.03.16.
- */
-public class LightNumberException {
+public class LightNumberException extends RuntimeException {
+    public LightNumberException() {
+    }
+
+    public LightNumberException(Throwable cause) {
+        super(cause);
+    }
+
+    public LightNumberException(String message) {
+        super(message);
+    }
+
+    public LightNumberException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

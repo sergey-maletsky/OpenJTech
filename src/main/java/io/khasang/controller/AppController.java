@@ -1,5 +1,6 @@
 package io.khasang.controller;
 
+import io.khasang.controller.exception.LightNumberException;
 import io.khasang.controller.exception.NotFoundException;
 import io.khasang.service.Message;
 import io.khasang.util.Lights;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class AppController {
+
     @Autowired
     Message message;
 
@@ -20,22 +22,25 @@ public class AppController {
         return "index";
     }
 
-    @RequestMapping(value = "/lights", method = RequestMethod.GET)
+    @RequestMapping(value = "/lights", method = RequestMethod.POST)
     public String getLight(Model model,
-                           @RequestParam(value = "minutes", required = true, defaultValue = "") String minutes) {
-        String light = "";
-        if (minutes.equals("2")) {
-            light = Lights.GREEN.getToken();
+                           @RequestParam(value = "seconds", required = true, defaultValue = "") String seconds) {
+        String light;
+        try {
+            if (seconds.equals(Lights.GREEN.getSeconds())) {
+                light = Lights.GREEN.getToken();
+            } else if (seconds.equals(Lights.YELLOW.getSeconds())) {
+                light = Lights.YELLOW.getToken();
+            } else if (seconds.equals(Lights.RED.getSeconds())) {
+                light = Lights.RED.getToken();
+            } else {
+                throw new LightNumberException();
+            }
         }
-        else if (minutes.equals("3")) {
-            light = Lights.YELLOW.getToken();
+        catch (LightNumberException nfe) {
+            return "errorNumber";
         }
-        else if (minutes.equals("4")) {
-            light = Lights.RED.getToken();
-        }
-
         model.addAttribute("light", light);
-
         return "index";
     }
 

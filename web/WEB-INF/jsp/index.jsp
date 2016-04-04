@@ -21,10 +21,10 @@
     <script src="${jqueryJs}" type="text/javascript"></script>
 </head>
 <body>
-<form class="main" action="${contextPath}/lights" method="get">
+<form class="main" action="${contextPath}/lights" method="post">
     <div>
-        <div>Введите количество минут (2 - зеленый, 3 - желтый, 4 - красный):</div>
-        <input type="text" name="minutes" placeholder="Количество минут">
+        <div>Введите количество секунд (2 - зеленый, 3 - желтый, 4 - красный):</div>
+        <input type="text" name="seconds" placeholder="Количество секунд">
         <input type="submit" value="Включить">
     </div>
     <div id="color" hidden="true">${light}</div>
@@ -33,32 +33,24 @@
 </body>
 <script type="text/javascript">
     var light = $("#color").text();
-    if (light == "Зеленый") {
+    var changeColor = function(color, seconds) {
         $("#light").removeClass("grey");
-        $("#light").addClass("green");
+        $("#light").addClass(color);
         setTimeout(function(){
             $("#light").text("");
-            $("#light").removeClass("green");
+            $("#light").removeClass(color);
             $("#light").addClass("grey");
-        }, 60000*2);
+        }, 1000*seconds);
+    }
+
+    if (light == "Зеленый") {
+        changeColor("green", 2);
     }
     else if (light =="Желтый") {
-        $("#light").removeClass("grey");
-        $("#light").addClass("yellow");
-        setTimeout(function(){
-            $("#light").text("");
-            $("#light").removeClass("yellow");
-            $("#light").addClass("grey");
-        }, 60000*3);
+        changeColor("yellow", 3);
     }
     else if (light == "Красный") {
-        $("#light").removeClass("grey");
-        $("#light").addClass("red");
-        setTimeout(function(){
-            $("#light").text("");
-            $("#light").removeClass("red");
-            $("#light").addClass("grey");
-        }, 40000*4);
+        changeColor("red", 4);
     }
 
 </script>
